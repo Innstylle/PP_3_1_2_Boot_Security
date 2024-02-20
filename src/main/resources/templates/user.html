@@ -4,8 +4,22 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
+<h1><span th:text="${user.name}"></span>, welcome spring boot security page!</h1>
 
+
+<div th:if="${user}">
+    <p>User ID: <span th:text="${user.id}"></span></p>
+    <p>Name: <span th:text="${user.name}"></span></p>
+    <p>Surname: <span th:text="${user.surname}"></span></p>
+    <p>Department: <span th:text="${user.department}"></span></p>
+    <p>Salary: <span th:text="${user.salary}"></span></p>
+</div>
+
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout"/>
+    </form>
+</div>
 
 </body>
 </html>
