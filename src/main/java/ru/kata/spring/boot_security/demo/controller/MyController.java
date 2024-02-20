@@ -44,7 +44,7 @@ public class MyController {
             model.addAttribute("user", user);
             return "user";
         } else {
-            return "error";
+            return "index";
         }
     }
 
