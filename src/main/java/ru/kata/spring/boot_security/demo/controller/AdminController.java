@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,35 +15,15 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.util.List;
 
 @Controller
-public class MyController {
+public class AdminController {
 
     private final UserService userService;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public MyController(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
-    }
-
-    @GetMapping("/")
-    public String home(Authentication authentication, Model model) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            model.addAttribute("showProfileButton", true);
-        }
-        return "index";
-    }
-
-    @GetMapping("/user")
-    public String homeForUser(Authentication authentication, Model model) {
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
-            String username = userDetails.getUsername();
-            User user = userService.getUserByName(username);
-            model.addAttribute("user", user);
-            return "user";
-        } else {
-            return "index";
-        }
     }
 
     @GetMapping("/admin")
@@ -83,5 +61,4 @@ public class MyController {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
-
 }
