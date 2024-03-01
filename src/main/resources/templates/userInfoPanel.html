@@ -15,62 +15,62 @@
     </style>
 </head>
 <body style="margin-top: 0;">
-<nav class="navbar navbar-default" style="background-color: rgba(0,0,0,0.79)">
-    <div class="container-fluid text-white">
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
         <div class="navbar-header ms-2">
-            <span class="navbar-brand" style="font-size: 20px;">
-                <span th:text="${userName}"></span> with roles: <span th:text="${userRole}"></span>
-            </span>
+                <span class="navbar-brand" style="font-size: 20px; color: white;">
+                    <span th:text="${userName}" style="font-weight: bold; font-size: 18px;"></span> with roles:
+                    <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">ADMIN</span>
+                    <span th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+                         <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> USER</span>
+                         <span th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">USER</span>
+                    </span>
+                </span>
         </div>
-        <div class="navbar-right">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Logout"/>
-            </form>
-        </div>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="btn btn-link text-secondary font-size-20" type="submit">Logout</button>
+        </form>
     </div>
 </nav>
 <br>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2 position-relative border-end">
-                <div class="list-group position-absolute top-0 start-0 end-0">
-                    <a href="/admin/panel" class="list-group-item list-group-item-action">Администратор и модератор</a>
-                    <a href="userInfoPanel" class="list-group-item list-group-item-action">Пользователь</a>
-                </div>
-            </div>
-            <div class="col-lg-10">
-                <nav class="navbar navbar-default" style="background-color: rgba(0,0,0,0.79)">
-                    <div class="container-fluid text-white">
-                        <div class="navbar-header ms-2">
-                <span class="navbar-brand" style="font-size: 20px;">
-                    <span th:text="${activeWindowName}"></span>
-                </span>
-                        </div>
-                    </div>
-                </nav>
-                <div th:fragment="user_content">
-                    <h1><span th:text="${user.name}"></span>, welcome spring boot security page!</h1>
-                    <div th:if="${user}">
-                        <p>User ID: <span th:text="${user.id}"></span></p>
-                        <p>Name: <span th:text="${user.name}"></span></p>
-                        <p>Surname: <span th:text="${user.surname}"></span></p>
-                        <p>Department: <span th:text="${user.department}"></span></p>
-                        <p>Salary: <span th:text="${user.salary}"></span></p>
-                    </div>
-
-                    <div>
-                        <form th:action="@{/logout}" method="post">
-                            <input type="submit" value="Logout"/>
-                        </form>
-                    </div>
-                </div>
-                <div class="container">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Logout"/>
-                    </form>
-                </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 position-relative border-end">
+            <div class="list-group position-absolute top-0 start-0 end-0">
+                <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a href="/admin/panel" class="list-group-item list-group-item-action">Admin</a>
+                </th:block>
+                <th:block th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'',''ROLE_USER'')')}">
+                    <a href="/userInfoPanel" class="list-group-item list-group-item-action">User</a>
+                </th:block>
             </div>
         </div>
+        <div class="col-lg-10">
+            <h2>User information-page</h2>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">FirstName</th>
+                    <th scope="col">LastName</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.age}"></td>
+                    <td th:text="${user.email}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
     </div>
+</div>
 </body>
 </html>

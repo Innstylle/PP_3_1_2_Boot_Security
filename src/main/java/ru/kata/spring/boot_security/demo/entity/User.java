@@ -11,16 +11,16 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstName")
+    private String firstName;
+    @Column(name = "lastName")
+    private String lastName;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "age")
+    private int age;
     @Column(name = "password")
     private String password;
-    @Column(name = "surname")
-    private String surname;
-    @Column(name = "department")
-    private String department;
-    @Column(name = "salary")
-    private int salary;
 
     @ManyToMany
     @JoinTable(name = "user_roles",
@@ -31,14 +31,14 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String name, String password,
-                String surname, String department, int salary, Collection<Role> roles) {
+    public User(Long id, String firstName, String password,
+                String lastName, String email, int age, Collection<Role> roles) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.password = password;
-        this.surname = surname;
-        this.department = department;
-        this.salary = salary;
+        this.lastName = lastName;
+        this.email = email;
+        this.age = age;
         this.roles = roles;
     }
 
@@ -50,36 +50,36 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String surname) {
+        this.lastName = surname;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setEmail(String department) {
+        this.email = department;
     }
 
-    public int getSalary() {
-        return salary;
+    public int getAge() {
+        return age;
     }
 
-    public void setSalary(int salary) {
-        this.salary = salary;
+    public void setAge(int salary) {
+        this.age = salary;
     }
 
     public String getPassword() {
@@ -102,10 +102,10 @@ public class User {
     public String toString() {
         return "User{" +
                "id=" + id +
-               ", name='" + name + '\'' +
-               ", surname='" + surname + '\'' +
-               ", department='" + department + '\'' +
-               ", salary=" + salary +
+               ", name='" + firstName + '\'' +
+               ", surname='" + lastName + '\'' +
+               ", department='" + email + '\'' +
+               ", salary=" + age +
                '}';
     }
 }

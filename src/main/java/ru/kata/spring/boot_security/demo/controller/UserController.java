@@ -35,14 +35,12 @@ public class UserController {
     public String homeForUser(Authentication authentication, Model model) {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
-            User user = userService.getUserByName(username);
-            model.addAttribute("activeWindowName","User panel");
+            User user = userService.getUserByEmail(username);
             model.addAttribute("userRole",authentication.getAuthorities()
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList()));
             model.addAttribute("userName", authentication.getName());
-            model.addAttribute("content", "user_content");
             model.addAttribute("user", user);
             return "userInfoPanel";
         } else {

@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,7 @@ public class AdminController {
     private final RoleRepository roleRepository;
     private static List<Role> roles = null;
 
+
     @Autowired
     public AdminController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
@@ -37,9 +37,9 @@ public class AdminController {
     public String showUsers(Model model, Authentication authentication) {
         List<User> userList = userService.getAllUser();
         List<Role> userRoleList = roleRepository.findAll();
-        myModel(model, authentication);
         model.addAttribute("all_user", userList);
         model.addAttribute("roles", userRoleList);
+        myModel(model, authentication);
         return "adminPanel";
     }
 
@@ -47,24 +47,18 @@ public class AdminController {
     @GetMapping("/admin/addNewUser")
     public String addNewUser(Model model, Authentication authentication) {
         myModel(model, authentication);
+        User user = new User();
         model.addAttribute("userName", authentication.getName());
-        model.addAttribute("user", new User());
+        model.addAttribute("user", user);
         model.addAttribute("allRoles", roles);
         return "editUser";
     }
+
 
     @PostMapping("/admin/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
         return "redirect:/admin/panel";
-    }
-    @PostMapping("/admin/m-editUser")
-    public ResponseEntity<?> updateUser(@ModelAttribute("user") User user) {
-        // Логика обновления пользователя
-        userService.saveUser(user);
-
-        // Возвращаем успешный статус
-        return ResponseEntity.ok().build();
     }
 
 
@@ -77,7 +71,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/deleteUser")
-    public String deleteUser(@RequestParam("userId") Long id) {
+    public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/panel";
     }

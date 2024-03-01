@@ -6,15 +6,17 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
-    <title>Spring Security Example</title>
+    <title>Home page</title>
 </head>
 <body>
-<h1>Welcome to Index PAGE!</h1>
+<h1>Welcome to Home PAGE!</h1>
 
 <div th:if="${showProfileButton}">
     <a th:href="@{/user}" class="btn btn-primary">View Profile</a>
 </div>
-
+<br>
+<br>
+<br>
 <div th:unless="${user}">
     <form th:action="@{/login}" method="get">
         <button type="submit">Login</button>
