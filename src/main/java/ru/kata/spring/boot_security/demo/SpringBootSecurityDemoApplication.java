@@ -38,7 +38,11 @@ public class SpringBootSecurityDemoApplication {
                 roleRepository.save(role);
             }
         }
-         userService.saveUser(new User(null, "user", "password",
-                "user", "user@gmail.com", 10, defaultRoles));
+        User defaultUser = userService.getUserByEmail("user@gmail.com");
+        if (defaultUser == null) {
+            defaultUser = new User(null, "user", "password",
+                    "user", "user@gmail.com", 10, defaultRoles);
+            userService.saveUser(defaultUser);
+        }
     }
 }
