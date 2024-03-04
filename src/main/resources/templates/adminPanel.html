@@ -226,17 +226,6 @@
                                                        th:value="${user.email}" disabled>
                                                 <br>
                                             </div>
-                                            <div>
-                                                <div class="shadow-none p-3 mb-5 bg-light rounded">
-                                                    <label for="role-[[${role.id}]]">Roles</label><br>
-                                                    <select class="custom-select w-100 form-control roles mx-auto text-center"
-                                                            name="roles"
-                                                            multiple style="max-height: 50px; overflow-y: auto;">
-                                                        <option th:each="role : ${roles}" th:value="${role.id}"
-                                                                th:text="${role.name}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                     Close
