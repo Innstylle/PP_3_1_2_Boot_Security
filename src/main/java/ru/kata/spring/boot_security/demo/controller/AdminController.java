@@ -5,13 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.Collections;
@@ -22,23 +18,20 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final UserService userService;
-    private final RoleRepository roleRepository;
-    private static List<Role> roles = null;
+    private final List<Role> roles;
 
 
     @Autowired
-    public AdminController(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
-        roles = roleRepository.findAll();
+        this.roles = userService.getAllRoles();
     }
 
     @GetMapping("/admin/panel")
     public String showUsers(Model model, Authentication authentication) {
         List<User> userList = userService.getAllUser();
-        List<Role> userRoleList = roleRepository.findAll();
         model.addAttribute("all_user", userList);
-        model.addAttribute("roles", userRoleList);
+        model.addAttribute("roles", roles);
         myModel(model, authentication);
         return "adminPanel";
     }
@@ -84,6 +77,5 @@ public class AdminController {
                         .collect(Collectors.toList()) :
                 Collections.emptyList());
         model.addAttribute("userName", authentication != null ? authentication.getName() : "");
-        model.addAttribute("roles", roles);
     }
 }

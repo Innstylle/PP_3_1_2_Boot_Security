@@ -49,7 +49,7 @@
                     <a href="/admin/panel" class="list-group-item list-group-item-action">Admin</a>
                 </th:block>
                 <th:block th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'',''ROLE_USER'')')}">
-                    <a href="/userInfoPanel" class="list-group-item list-group-item-action">User</a>
+                    <a href="/user" class="list-group-item list-group-item-action">User</a>
                 </th:block>
             </div>
         </div>
@@ -149,14 +149,16 @@
                                                 <br>
                                             </div>
                                             <div>
-                                                <div class="shadow-none p-3 mb-5 bg-light rounded">
-                                                    <label for="roles">Roles</label><br>
-                                                    <select class="custom-select w-100  mx-auto text-center" id="roles"
-                                                            name="roles" multiple
-                                                            style="max-height: 50px; overflow-y: auto;">
-                                                        <option th:each="role : ${roles}" th:value="${role.id}"
-                                                                th:text="${role.name}"></option>
-                                                    </select>
+                                                <div class="shadow-none mx-auto text-center">
+                                                    <label>Roles</label><br>
+                                                    <div class="mx-auto text-center" style="max-height: 100px; overflow-y: auto;">
+                                                        <div th:each="role : ${roles}">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="role-[[${role.id}]]" th:value="${role.id}" name="roles">
+                                                                <label class="custom-control-label" for="role-[[${role.id}]]" th:text="${role.name}"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <br>
                                                 </div>
                                             </div>

@@ -1,16 +1,17 @@
 package ru.kata.spring.boot_security.demo.entity;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
     @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName")
