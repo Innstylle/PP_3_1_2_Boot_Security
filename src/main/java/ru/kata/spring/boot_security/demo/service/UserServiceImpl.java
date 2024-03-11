@@ -14,6 +14,7 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
+    public Role getRoleById(Long roleId) {
+        return roleRepository.getById(roleId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
@@ -47,18 +53,45 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUser(User user, List<Role> roleIds) {
+        // Получаем список ролей пользователя по их идентификаторам
+        List<Role> roles = roleRepository.findAllById(roleIds.stream().map(Role::getId).collect(Collectors.toList()));
+
+        // Устанавливаем новый список ролей пользователю
+        user.setRoleIds(roles);
+
+        // Проверяем, существует ли пользователь с таким email
         User existingUser = getUserByEmail(user.getEmail());
+
         if (existingUser != null) {
-            if (!user.getPassword().equals(existingUser.getPassword())) {
+            // Если пользователь уже существует, обновляем его данные
+            // Проверяем, изменился ли пароль, и если да, кодируем его
+            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
+
+            // Обновляем остальные данные пользователя
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setAge(user.getAge());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setRoleIds(user.getRoleIds());
+
+            // Сохраняем обновленного пользователя
+            userRepository.save(existingUser);
         } else {
+            // Если пользователь не существует, сохраняем нового пользователя
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         }
-        userRepository.save(user);
     }
 
+
+
+    @Transactional(readOnly = true)
+    public List<Role> getRolesByIds(List<Long> roleIds) {
+        return roleRepository.findAllById(roleIds);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -87,7 +120,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+                user.getPassword(), mapRolesToAuthorities(user.getRoleIds()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

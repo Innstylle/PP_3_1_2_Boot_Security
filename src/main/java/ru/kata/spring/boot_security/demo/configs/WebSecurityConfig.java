@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.modelmapper.AbstractConverter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.entity.Role;
+
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -23,9 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user").hasAnyRole("ADMIN","USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                //.antMatchers("/user").hasAnyRole("ADMIN","USER")
+                //.antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -38,5 +46,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ModelMapper getModelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addConverter(new AbstractConverter<Role, Long>() {
+            @Override
+            protected Long convert(Role role) {
+                return role.getId();
+            }
+        });
+        return modelMapper;
     }
 }
