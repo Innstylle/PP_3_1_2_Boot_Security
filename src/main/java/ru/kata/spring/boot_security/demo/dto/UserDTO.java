@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Collection;

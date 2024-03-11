@@ -13,28 +13,58 @@ async function getAllUsers() {
 }
 async function deleteUser(userId) {
     try {
-        // Отправляем запрос на удаление пользователя с указанным ID
-        const response = await fetch(`http://localhost:8080/admin/api/removeUser/${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        });
+        // Показываем модальное окно подтверждения перед удалением пользователя
+
+        const response = await fetch(`http://localhost:8080/admin/api/showUser/${userId}`);
 
         // Проверяем успешность выполнения запроса
-        if (response.ok) {
-            // Если пользователь успешно удален, обновляем таблицу
-            await createUpdateTable();
-            console.log('Пользователь успешно удален.');
-        } else {
-            console.error('Ошибка удаления пользователя:', response.statusText);
+        if (!response.ok) {
+            throw new Error('Ошибка при получении данных пользователя для удаления');
         }
+
+        // Получаем данные пользователя из ответа
+
+        const userData = await response.json();
+
+        $('#deleteUserModal').modal('show');
+
+        // Отображаем данные о пользователе в модальном окне
+        $("#deleteUserId").text(userData.id);
+        $("#deleteUserFirstName").text(userData.firstName);
+        $("#deleteUserLastName").text(userData.lastName);
+        $("#deleteUserAge").text(userData.age);
+        $("#deleteUserEmail").text(userData.email);
+
+        // Добавляем обработчик события на кнопку подтверждения удаления
+        $("#confirmDeleteButton").on("click", async function() {
+            // Отправляем запрос на удаление пользователя с указанным ID
+            const response = await fetch(`http://localhost:8080/admin/api/removeUser/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            });
+
+            // Проверяем успешность выполнения запроса
+            if (response.ok) {
+                // Если пользователь успешно удален, обновляем таблицу
+                await createUpdateTable();
+                console.log('Пользователь успешно удален.');
+            } else {
+                console.error('Ошибка удаления пользователя:', response.statusText);
+            }
+
+            // Закрываем модальное окно подтверждения удаления
+            $('#deleteUserModal').modal('hide');
+
+            // Удаляем обработчик события на кнопку подтверждения удаления
+            $("#confirmDeleteButton").off("click");
+        });
     } catch (error) {
         console.error('Произошла ошибка при удалении пользователя:', error);
     }
-
-
 }
+
 
 
 async function openEditModal(userId) {
@@ -56,6 +86,7 @@ async function openEditModal(userId) {
         $("#editModal input[name='lastName']").val(userData.lastName);
         $("#editModal input[name='age']").val(userData.age);
         $("#editModal input[name='email']").val(userData.email);
+        $("#editModal input[name='password']").val(userData.password);
 
         // Получаем данные о всех ролях с сервера
         const rolesResponse = await fetch('http://localhost:8080/admin/api/allRoles');
@@ -93,6 +124,7 @@ async function openEditModal(userId) {
             lastName: $("#editModal input[name='lastName']").val(),
             age: $("#editModal input[name='age']").val(),
             email: $("#editModal input[name='email']").val(),
+            password: $("#editModal input[name='password']").val(),
             roleIds: [] // Инициализируем массив ролей
         };
 
@@ -187,7 +219,7 @@ async function createUpdateTable() {
                     .text("Delete")
                     .on("click", function() {
                         // При нажатии на кнопку "Удалить" вызываем функцию для удаления пользователя
-                        deleteUser(user.id);
+                        deleteUser(user.id,);
                     });
 
 
@@ -242,20 +274,20 @@ async function showUserForm() {
     });
 
     // Добавляем поля для ввода данных пользователя
-    form.append("<label>First Name:</label>");
-    form.append("<input type='text' name='firstName'><br>");
+    form.append("<label>First Name:</label><br>");
+    form.append("<input type='text' name='firstName'><br><br>");
 
-    form.append("<label>Last Name:</label>");
-    form.append("<input type='text' name='lastName'><br>");
+    form.append("<label>Last Name:</label><br>");
+    form.append("<input type='text' name='lastName'><br><br>");
 
-    form.append("<label>Age:</label>");
-    form.append("<input type='text' name='age'><br>");
+    form.append("<label>Age:</label><br>");
+    form.append("<input type='text' name='age'><br><br>");
 
-    form.append("<label>Email:</label>");
-    form.append("<input type='email' name='email'><br>");
+    form.append("<label>Email:</label><br>");
+    form.append("<input type='email' name='email'><br><br>");
 
-    form.append("<label>Password:</label>");
-    form.append("<input type='password' name='password'><br>");
+    form.append("<label>Password:</label><br>");
+    form.append("<input type='password' name='password'><br><br>");
 
     // Получаем данные о ролях с сервера
     try {

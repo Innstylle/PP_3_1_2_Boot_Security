@@ -10,7 +10,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class SpringBootSecurityDemoApplication {
@@ -41,8 +40,8 @@ public class SpringBootSecurityDemoApplication {
         }
         User defaultUser = userService.getUserByEmail("user@gmail.com");
         if (defaultUser == null) {
-            defaultUser = new User(null, "user", "password",
-                    "user", 10, "user@gmail.com", defaultRoles);
+            defaultUser = new User(null, "user", "user",
+                    "user@gmail.com", 10, "password", defaultRoles);
             userService.saveUser(defaultUser, defaultRoles);
         }
     }

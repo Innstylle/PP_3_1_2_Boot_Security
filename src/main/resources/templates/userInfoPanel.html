@@ -38,7 +38,7 @@
         <div class="col-lg-2 position-relative border-end">
             <div class="list-group position-absolute top-0 start-0 end-0">
                 <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                    <a href="/admin/panel" class="list-group-item list-group-item-action">Admin</a>
+                    <a href="/admin" class="list-group-item list-group-item-action">Admin</a>
                 </th:block>
                 <th:block th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'',''ROLE_USER'')')}">
                     <a href="/user" class="list-group-item list-group-item-action">User</a>
