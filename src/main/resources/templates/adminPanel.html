@@ -29,6 +29,15 @@
             width: 40%; /* Настройте ширину по вашему усмотрению */
         }
 
+        .nav-item button {
+            background-color: rgba(0, 0, 0, 0.79); /* Цвет кнопок */
+            color: #fff; /* Цвет текста кнопок */
+        }
+
+        .nav-item button:hover {
+            background-color: rgba(0, 0, 0, 0.9); /* Цвет кнопок при наведении */
+        }
+
         #insertTableHere {
             display: flex;
             justify-content: center; /* Выравнивание по горизонтали */
@@ -81,10 +90,10 @@
             </nav>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <button onclick="createUpdateTable()" class="btn btn-primary">Таблица пользователей</button>
+                    <button onclick="createUpdateTable()" class="btn btn-dark">Таблица пользователей</button>
                 </li>
                 <li class="nav-item">
-                    <button onclick="showUserForm()" class="btn btn-primary">Добавить пользователя</button>
+                    <button onclick="showUserForm()" class="btn btn-dark">Добавить пользователя</button>
                 </li>
             </ul>
             <h2>All Users</h2>
