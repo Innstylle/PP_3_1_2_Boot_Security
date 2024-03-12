@@ -51,7 +51,7 @@
     <div class="container-fluid">
         <div class="navbar-header ms-2">
                 <span class="navbar-brand" style="font-size: 20px; color: white;">
-                    <span th:text="${userName}" style="font-weight: bold; font-size: 18px;"></span> with roles:
+                    <span th:text="${#authentication.name}" style="font-weight: bold; font-size: 18px;"></span> with roles:
                     <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">ADMIN</span>
                     <span th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
                          <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> USER</span>
@@ -82,12 +82,13 @@
             <nav class="navbar navbar-default" style="background-color: rgba(0,0,0,0.79)">
                 <div class="container-fluid text-white">
                     <div class="navbar-header ms-2">
-                        <span class="navbar-brand" style="font-size: 20px;">
-                            <span th:text="${activeWindowName}"></span>
-                        </span>
+            <span class="navbar-brand" style="font-size: 20px;">
+                Admin Panel
+            </span>
                     </div>
                 </div>
             </nav>
+
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <button onclick="createUpdateTable()" class="btn btn-dark">Таблица пользователей</button>

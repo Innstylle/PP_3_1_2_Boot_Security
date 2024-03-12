@@ -19,7 +19,7 @@
     <div class="container-fluid">
         <div class="navbar-header ms-2">
                 <span class="navbar-brand" style="font-size: 20px; color: white;">
-                    <span th:text="${userName}" style="font-weight: bold; font-size: 18px;"></span> with roles:
+                    <span th:text="${#authentication.name}" style="font-weight: bold; font-size: 18px;"></span> with roles:
                     <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">ADMIN</span>
                     <span th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
                          <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> USER</span>
@@ -59,11 +59,11 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.age}"></td>
-                    <td th:text="${user.email}"></td>
+                    <td id="userId"></td>
+                    <td id="userFirstName"></td>
+                    <td id="userLastName"></td>
+                    <td id="userAge"></td>
+                    <td id="userEmail"></td>
                 </tr>
                 </tbody>
             </table>
@@ -72,5 +72,17 @@
         </div>
     </div>
 </div>
+<script>
+    fetch('http://localhost:8080/user/') // Ваш URL для получения пользователя
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('userId').innerText = data.id;
+            document.getElementById('userFirstName').innerText = data.firstName;
+            document.getElementById('userLastName').innerText = data.lastName;
+            document.getElementById('userAge').innerText = data.age;
+            document.getElementById('userEmail').innerText = data.email;
+        })
+        .catch(error => console.error('Ошибка при получении данных пользователя:', error));
+</script>
 </body>
 </html>

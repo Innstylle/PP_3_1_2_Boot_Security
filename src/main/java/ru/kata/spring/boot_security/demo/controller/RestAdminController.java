@@ -58,7 +58,7 @@ public class RestAdminController {
     }
 
     @PostMapping("/editUser/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO updatedUser){
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO updatedUser) {
         User user = convertToUser(updatedUser);
         user.setId(id);
         List<Role> roles = userService.getRolesByIds(updatedUser.getRoleIds().stream().toList());
